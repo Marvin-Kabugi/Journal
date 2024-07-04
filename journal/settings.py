@@ -40,9 +40,9 @@ INSTALLED_APPS = [
     'customuser.apps.CustomuserConfig',
     'journal_api.apps.JournalApiConfig',
     'rest_framework',
-    'rest_framework.authtoken',
-    'rest_framework_simplejwt',
-    'rest_framework_simplejwt.token_blacklist',
+    # 'rest_framework.authtoken',
+    # 'rest_framework_simplejwt',
+    # 'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -134,8 +134,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'customuser.CustomUser'
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication'
-    )
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework_simplejwt.authentication.JWTAuthentication'
+#     )
+# }
