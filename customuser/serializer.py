@@ -6,7 +6,7 @@ class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=False)
     class Meta:
         model = CustomUser
-        fields = ['email', 'first_name', 'last_name','username']
+        fields = ['id', 'email', 'first_name', 'last_name','username']
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
