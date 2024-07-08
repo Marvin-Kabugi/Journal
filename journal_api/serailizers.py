@@ -12,6 +12,7 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id', 'category_name', 'description']
+        
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
@@ -41,6 +42,7 @@ class TagSerializer(serializers.ModelSerializer):
             except Tag.DoesNotExist:
                 raise serializers.ValidationError("Tag with this id does not exist.")
         return super().to_internal_value(data)
+    
 
 class JournalEntrySerializer(serializers.ModelSerializer):
     owner = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), default=serializers.CurrentUserDefault(), source='user')

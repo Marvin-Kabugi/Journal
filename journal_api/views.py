@@ -33,15 +33,19 @@ class JournalEntryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = JournalEntry.objects.all()
     serializer_class = JournalEntrySerializer
 
-    # def update(self, request, *args, **kwargs):
-    #     tags = request.data.pop('tags', None)
-    #     instance = self.get_object()
-    #     serializer = self.get_serializer(instance, data= request.data, many=False, partial=False)
-    #     serializer.is_valid(raise_exception=True)
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-    #     if tags is not None:
-    #         instance.tags.clear()
-    #         for tag in tags:
-    #             tag_obj, created = Tag.objects.get_or_create(**tag)
-    #             instance.tags.add(tag_obj)
-    #     return super().update(request, *args, **kwargs)
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance=instance, data= request.data, many=False, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
