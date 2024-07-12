@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
+from django.contrib.auth import authenticate
 from django.conf import settings
 
 from rest_framework import generics, status
@@ -26,10 +27,6 @@ class UserList(generics.ListCreateAPIView):
         if self.request in SAFE_METHODS:
             permissions.append(IsAdminUser)
         return [permission() for permission in permissions]
-
-class UserDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
 
 
 class RegisterUser(APIView):
@@ -59,6 +56,24 @@ class RegisterUser(APIView):
         self.utility.send_email(email_data)
 
         return Response({'message': 'User registered successfully. Please check your email for verification link'}, status=status.HTTP_201_CREATED)
+    
+
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if 'old_password' in request.data:
+            user = authenticate(request=request, email=request.data.get('email'), password=request.data.get('password'))
+                
+        serializer = self.get_serializer(instance=instance, data = request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+
+class SingUp(APIView):
+    pass
     
 
 class VerifyEmail(APIView):
