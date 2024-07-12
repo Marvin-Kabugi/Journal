@@ -6,11 +6,11 @@ class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=False)
     class Meta:
         model = CustomUser
-        fields = ['id', 'email', 'first_name', 'last_name','username']
+        fields = ['id', 'email', 'first_name', 'last_name','username', 'password']
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-
+        data.pop('password')
         if data['username'] is None:
             data.pop('username')
             return data
